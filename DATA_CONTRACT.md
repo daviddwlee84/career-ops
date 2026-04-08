@@ -42,6 +42,9 @@ These files contain system logic, scripts, templates, and instructions that impr
 | `modes/tracker.md` | Tracker instructions |
 | `modes/training.md` | Training evaluation instructions |
 | `modes/de/*` | German language modes |
+| `modes/fr/*` | French language modes |
+| `modes/zh-cn/*` | Simplified Chinese language modes |
+| `modes/zh-tw/*` | Traditional Chinese language modes |
 | `CLAUDE.md` | Agent instructions |
 | `*.mjs` | Utility scripts |
 | `batch/batch-prompt.md` | Batch worker prompt |

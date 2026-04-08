@@ -183,6 +183,8 @@ Default modes are in `modes/` (English). Additional language-specific modes are 
 
 - **German (DACH market):** `modes/de/` — native German translations with DACH-specific vocabulary (13. Monatsgehalt, Probezeit, Kündigungsfrist, AGG, Tarifvertrag, etc.). Includes `_shared.md`, `angebot.md` (evaluation), `bewerben.md` (apply), `pipeline.md`.
 - **French (Francophone market):** `modes/fr/` — native French translations with France/Belgium/Switzerland/Luxembourg-specific vocabulary (CDI/CDD, convention collective SYNTEC, RTT, mutuelle, prévoyance, 13e mois, intéressement/participation, titres-restaurant, CSE, portage salarial, etc.). Includes `_shared.md`, `offre.md` (evaluation), `postuler.md` (apply), `pipeline.md`.
+- **Simplified Chinese (Mainland China market):** `modes/zh-cn/` — native Simplified Chinese modes with Mainland China-specific vocabulary (试用期, 五险一金, 13薪/年终奖, 双休/大小周, 到岗时间, 统招, etc.). Uses English filenames and includes `_shared.md`, `offer.md` (evaluation), `apply.md`, `pipeline.md`, `scan.md`.
+- **Traditional Chinese (Taiwan market):** `modes/zh-tw/` — native Traditional Chinese modes with Taiwan-specific vocabulary (試用期, 勞保/健保, 勞退, 年終, 三節, 補班, 到職日, 面議, etc.). Uses English filenames and includes `_shared.md`, `offer.md` (evaluation), `apply.md`, `pipeline.md`, `scan.md`.
 
 **When to use German modes:** If the user is targeting German-language job postings, lives in DACH, or asks for German output. Either:
 1. User says "use German modes" → read from `modes/de/` instead of `modes/`
@@ -194,7 +196,17 @@ Default modes are in `modes/` (English). Additional language-specific modes are 
 2. User sets `language.modes_dir: modes/fr` in `config/profile.yml` → always use French modes
 3. You detect a French JD → suggest switching to French modes
 
-**When NOT to:** If the user applies to English-language roles, even at French or German companies, use the default English modes.
+**When to use Simplified Chinese modes:** If the user is targeting Mainland China Chinese-language job postings, lives in Mainland China, or asks for Simplified Chinese output. Either:
+1. User says "use Simplified Chinese modes" → read from `modes/zh-cn/` instead of `modes/`
+2. User sets `language.modes_dir: modes/zh-cn` in `config/profile.yml` → always use Simplified Chinese modes
+3. You detect a Mainland China Chinese JD → suggest switching to Simplified Chinese modes
+
+**When to use Traditional Chinese modes:** If the user is targeting Taiwan Chinese-language job postings, lives in Taiwan, or asks for Traditional Chinese output. Either:
+1. User says "use Traditional Chinese modes" → read from `modes/zh-tw/` instead of `modes/`
+2. User sets `language.modes_dir: modes/zh-tw` in `config/profile.yml` → always use Traditional Chinese modes
+3. You detect a Taiwan Chinese JD → suggest switching to Traditional Chinese modes
+
+**When NOT to:** If the user applies to English-language roles, even at French, German, Mainland China, or Taiwan companies, use the default English modes.
 
 ### Skill Modes
 

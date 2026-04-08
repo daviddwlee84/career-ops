@@ -43,6 +43,23 @@ title_filter:
     - "KI Trainer"
     - "Dozent"
     - "Weiterbildung"
+    # -- Chinese / Traditional Chinese keywords (CN/TW markets) --
+    - "人工智能"
+    - "機器學習"
+    - "机器学习"
+    - "大模型"
+    - "生成式AI"
+    - "生成式 AI"
+    - "智能體"
+    - "智能体"
+    - "AI 工程師"
+    - "AI 工程师"
+    - "解決方案架構師"
+    - "解决方案架构师"
+    - "產品經理"
+    - "产品经理"
+    - "自動化"
+    - "自动化"
     # -- Engineering roles --
     - "Platform Engineer"
     - "Solutions Architect"
@@ -86,6 +103,10 @@ title_filter:
     - "Oracle EBS"
     - "Mainframe"
     - "COBOL"
+    - "實習"
+    - "实习"
+    - "應屆"
+    - "应届"
   seniority_boost:
     # These prefixes add relevance but are not required
     - "Senior"
@@ -94,6 +115,10 @@ title_filter:
     - "Lead"
     - "Head"
     - "Director"
+    - "資深"
+    - "资深"
+    - "高級"
+    - "高级"
 
 # -- Search queries --
 # Each query triggers a WebSearch. Use site: to filter by portal.
@@ -185,6 +210,21 @@ search_queries:
   - name: RemoteFront — AI & Automation
     query: 'site:remotefront.com "AI Engineer" OR "Solutions Engineer" OR "Automation" OR "LLM" OR "Agent" remote'
     enabled: true
+
+  # -- China / Taiwan portals (examples; disabled by default) --
+  # Enable only if the portal is accessible in your environment and your use
+  # complies with the portal's terms.
+  - name: Boss 直聘 — AI / 大模型
+    query: 'site:zhipin.com "人工智能" OR "大模型" OR "AI 工程师" OR "解决方案架构师"'
+    enabled: false
+
+  - name: 脈脈 — AI / 產品
+    query: 'site:maimai.cn "人工智能" OR "AI 产品经理" OR "解决方案架构师"'
+    enabled: false
+
+  - name: 104 人力銀行 — AI / 解決方案
+    query: 'site:104.com.tw "AI 工程師" OR "機器學習" OR "解決方案架構師" OR "產品經理"'
+    enabled: false
 
 # -- Tracked companies --
 # Companies whose career pages are checked directly.
