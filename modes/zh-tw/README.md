@@ -49,12 +49,12 @@ language:
 |------|------|------|
 | `README.md` | 新增 | 說明何時使用繁體中文模式、如何啟用、哪些內容已在地化 |
 | `_shared.md` | `modes/_shared.md` | 共享脈絡、評分規則、工具規則、台灣求職語境 |
-| `offer.md` | `modes/oferta.md` | 單一職缺的完整 A-F 評估 |
+| `offer.md` | `modes/offer.md` | 單一職缺的完整 A-F 評估 |
 | `apply.md` | `modes/apply.md` | 即時申請表填寫助手 |
 | `pipeline.md` | `modes/pipeline.md` | URL inbox / 待處理職缺流程 |
 | `scan.md` | `modes/scan.md` | 平台掃描與新職缺發現 |
 
-其他 mode 例如 `batch`、`pdf`、`tracker`、`auto-pipeline`、`deep`、`contacto`、`project`、`training`，這一輪仍沿用根目錄下的 EN/ES 原版。
+其他 mode 例如 `batch`、`pdf`、`tracker`、`auto-pipeline`、`deep`、`contact`、`compare`、`project`、`training`，這一輪仍沿用根目錄下的英文原版（`modes/`）。
 
 ## 哪些內容仍保留英文？
 

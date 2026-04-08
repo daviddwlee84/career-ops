@@ -111,7 +111,7 @@
 
 1. 把 `applications.md` 狀態從 `Evaluated` 更新為 `Applied`
 2. 把最終版回答寫回 report 的 Section G
-3. 建議下一步執行 `/career-ops contacto` 做 LinkedIn / Cake / 人脈外聯
+3. 建議下一步執行 `/career-ops contact` 做 LinkedIn / Cake / 人脈外聯
 
 ## 捲動處理
 

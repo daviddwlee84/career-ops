@@ -49,12 +49,12 @@ language:
 |------|------|------|
 | `README.md` | 新增 | 说明何时使用简体中文模式、如何启用、哪些内容已本地化 |
 | `_shared.md` | `modes/_shared.md` | 共享上下文、评分规则、工具规则、中国大陆市场语境 |
-| `offer.md` | `modes/oferta.md` | 单个岗位的完整 A-F 评估 |
+| `offer.md` | `modes/offer.md` | 单个岗位的完整 A-F 评估 |
 | `apply.md` | `modes/apply.md` | 实时申请表填写助手 |
 | `pipeline.md` | `modes/pipeline.md` | URL inbox / 待处理职位流水线 |
 | `scan.md` | `modes/scan.md` | 平台扫描与新职位发现 |
 
-其他 mode 例如 `batch`、`pdf`、`tracker`、`auto-pipeline`、`deep`、`contacto`、`project`、`training` 这一轮仍沿用根目录下的 EN/ES 原版。
+其他 mode 例如 `batch`、`pdf`、`tracker`、`auto-pipeline`、`deep`、`contact`、`compare`、`project`、`training` 这一轮仍沿用根目录下的英文原版（`modes/`）。
 
 ## 哪些内容仍保留英文？
 

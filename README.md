@@ -97,7 +97,7 @@ Career-ops is a single slash command with multiple modes:
 /career-ops tracker        → View application status
 /career-ops apply          → Fill application forms with AI
 /career-ops pipeline       → Process pending URLs
-/career-ops contacto       → LinkedIn outreach message
+/career-ops contact        → LinkedIn outreach message
 /career-ops deep           → Deep company research
 /career-ops training       → Evaluate a course/cert
 /career-ops project        → Evaluate a portfolio project
@@ -165,7 +165,7 @@ career-ops/
 │   └── profile.example.yml      # Template for your profile
 ├── modes/                       # 14 skill modes
 │   ├── _shared.md               # Shared context (customize this)
-│   ├── oferta.md                # Single evaluation
+│   ├── offer.md                 # Single evaluation
 │   ├── pdf.md                   # PDF generation
 │   ├── scan.md                  # Portal scanner
 │   ├── batch.md                 # Batch processing
@@ -314,7 +314,7 @@ Career-ops 是一個單一 slash command，但支援多種模式：
 /career-ops tracker        → 查看申請狀態
 /career-ops apply          → 用 AI 填寫申請表單
 /career-ops pipeline       → 處理待處理 URL
-/career-ops contacto       → LinkedIn 外聯訊息
+/career-ops contact        → LinkedIn 外聯訊息
 /career-ops deep           → 深度公司研究
 /career-ops training       → 評估課程或證照
 /career-ops project        → 評估作品集專案
@@ -382,7 +382,7 @@ career-ops/
 │   └── profile.example.yml      # 個人資料範本
 ├── modes/                       # 14 個技能模式
 │   ├── _shared.md               # 共用上下文（請客製化）
-│   ├── oferta.md                # 單一職缺評估
+│   ├── offer.md                 # 單一職缺評估
 │   ├── pdf.md                   # PDF 生成
 │   ├── scan.md                  # 平台掃描器
 │   ├── batch.md                 # 批次處理
@@ -526,7 +526,7 @@ Career-ops es un unico slash command con multiples modos:
 /career-ops tracker        → Ver estado de aplicaciones
 /career-ops apply          → Rellenar formularios con IA
 /career-ops pipeline       → Procesar URLs pendientes
-/career-ops contacto       → Mensaje LinkedIn outreach
+/career-ops contact        → Mensaje LinkedIn outreach
 /career-ops deep           → Research profundo de empresa
 ```
 

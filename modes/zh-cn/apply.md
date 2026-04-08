@@ -111,7 +111,7 @@
 
 1. 把 `applications.md` 状态从 `Evaluated` 更新为 `Applied`
 2. 把最终版回答写回 report 的 Section G
-3. 建议下一步执行 `/career-ops contacto` 做 LinkedIn / 脉脉外联
+3. 建议下一步执行 `/career-ops contact` 做 LinkedIn / 脉脉外联
 
 ## 滚动处理
 
