@@ -1,31 +1,33 @@
 # Mode: project — Portfolio Project Evaluation
 
-Score six dimensions (1–5):
+**URL:** {project-url}
+**Legitimacy:** {High Confidence | Proceed with Caution | Suspicious}
+
+Scoring matrix with 6 dimensions (1–5):
 
 | Dimension | Weight | 5 = ... | 1 = ... |
-|-----------|--------|---------|---------|
-| Signal for target roles | 25% | Directly proves a skill from the JD | Unrelated |
-| Uniqueness | 20% | Nobody else has done this | Everyone has it |
-| Demo-ability | 20% | Live demo in 2 minutes | Code only, nothing visual |
+|-----------|------|---------|---------|
+| Signal for target roles | 25% | Directly demonstrates JD skill | Not related |
+| Uniqueness | 20% | Nobody has done this | Very common |
+| Demo ability | 20% | Live demo in 2 min | Code only, not visual |
 | Metrics potential | 15% | Clear metrics (latency, cost, accuracy) | No metrics possible |
-| Time to MVP | 10% | One week | 3+ months |
+| Time to MVP | 10% | 1 week | 3+ months |
 | STAR story potential | 10% | Rich story with trade-offs | Implementation only |
 
-## "Interview pack" requirements
+## "Interview Pack" Requirements
 
 For each approved project:
+1. **One-pager**: product + architecture + metrics + evaluation plan
+2. **Demo**: live URL or 2 min recorded walkthrough
+3. **Postmortem**: what worked, what didn’t, mitigations
 
-1. **One-pager** — product + architecture + metrics + evaluation plan
-2. **Demo** — live URL or a 2-minute recorded walkthrough
-3. **Postmortem** — what worked, what didn't, mitigations
+## 80/20 Plan
 
-## 80/20 plan
-
-- Week 1 → MVP with one core metric
+- Week 1 → MVP with core metric
 - Week 2 → polish + interview pack
 
 ## Verdicts
 
-- **BUILD** — plan with weekly milestones
-- **SKIP** — why, and what to do instead
-- **PIVOT TO [alternative]** — a higher-impact variant
+- **BUILD** → plan with weekly milestones
+- **SKIP** → why and what to do instead
+- **PIVOT TO [alternative]** → more impactful variant

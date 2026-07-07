@@ -11,9 +11,9 @@ Key sections:
 - **compensation**: Target range, minimum, currency
 - **location**: Country, timezone, visa status, on-site availability
 
-## Target Roles (modes/_shared.md)
+## Target Roles (modes/_profile.md)
 
-The archetype table in `_shared.md` determines how offers are scored and CVs are framed. Edit the table to match YOUR career targets:
+The archetype table in `_profile.md` determines how offers are scored and CVs are framed. Edit the table to match YOUR career targets:
 
 ```markdown
 | Archetype | Thematic axes | What they buy |
@@ -30,7 +30,7 @@ Copy from `templates/portals.example.yml` and customize:
 
 1. **title_filter.positive**: Keywords matching your target roles
 2. **title_filter.negative**: Tech stacks or domains to exclude
-3. **search_queries**: WebSearch queries for job boards (Ashby, Greenhouse, Lever, or regional portals like 104 / Boss 直聘)
+3. **search_queries**: WebSearch queries for job boards (Ashby, Greenhouse, Lever)
 4. **tracked_companies**: Companies to check directly
 
 ## CV Template (templates/cv-template.html)
@@ -66,7 +66,7 @@ Career-ops can integrate with external systems via Claude Code hooks. Example ho
 }
 ```
 
-Save hooks in `.claude/settings.json`.
+Save hooks in `.claude/settings.json` (Claude Code). OpenCode does not support hooks. For equivalent functionality, use custom commands (`.opencode/commands/`) or agents (`.opencode/agents/`) — see https://opencode.ai/docs/commands/.
 
 ## States (templates/states.yml)
 

@@ -1,29 +1,29 @@
 # career-ops -- Modos en español (`modes/es/`)
 
-Esta carpeta contiene los modos career-ops en español para candidatos que buscan empleo en mercados hispanohablantes o que trabajan con ofertas de empleo en español.
+Esta carpeta contiene las traducciones al español de los principales modos de career-ops para candidatos que apuntan al mercado hispanohablante (España, México, Argentina, Colombia, Chile y otros países de LATAM).
 
 ## ¿Cuándo usar estos modos?
 
 Usa `modes/es/` si se cumple al menos una de estas condiciones:
 
-- Postulas principalmente a **ofertas de empleo en español** (InfoJobs, LinkedIn ES, Indeed ES, portales de empleo locales)
+- Aplicas principalmente a **ofertas de empleo en español** (InfoJobs, LinkedIn ES, Indeed ES, Tecnoempleo, Computrabajo, portales de empleo corporativos)
 - Tu **CV está en español** o alternas entre ES e EN según la oferta
-- Necesitas respuestas y cartas de motivación en **español tech natural**, no traducido por máquina
-- Necesitas manejar **conceptos del mercado laboral hispanohablante**: convenio colectivo, nómina, pagas extra, periodo de prueba, preaviso, contrato indefinido/temporal, seguridad social, IRPF, teletrabajo
+- Necesitas respuestas y cartas de presentación en **español técnico natural**, no traducido por una máquina
+- Debes gestionar **especificidades contractuales hispanohablantes**: convenio colectivo, pagas extra, IRPF, Seguridad Social, período de prueba, preaviso, ticket restaurante, seguro médico, contrato indefinido/temporal
 
-Si la mayoría de tus ofertas son en inglés, usa los modos estándar en `modes/`. Los modos ingleses son el default y están orientados al mercado norteamericano (US/Canada).
+Si la mayoría de tus ofertas son en inglés, quédate con los modos estándar en `modes/`. Los modos en inglés funcionan para ofertas hispanohablantes, pero no conocen las especificidades del mercado en detalle.
 
 ## ¿Cómo activar?
 
 ### Opción 1 -- Por sesión
 
-Dile a Claude al inicio de la sesión:
+Di al agente al inicio de la sesión:
 
-> "Usa los modos en español bajo `modes/es/`."
+> "Usa los modos en español de `modes/es/`."
 
-Claude leerá los archivos de esta carpeta en lugar de `modes/`.
+El agente leerá entonces los archivos de esta carpeta en lugar de `modes/`.
 
-### Opción 2 -- Permanente
+### Opción 2 -- De forma permanente
 
 Añade en `config/profile.yml`:
 
@@ -33,72 +33,73 @@ language:
   modes_dir: modes/es
 ```
 
-Recuérdaselo a Claude en tu primera sesión ("Mira en `profile.yml`, tengo `language.modes_dir` configurado"). Claude usará automáticamente los modos en español.
+Recuérdaselo al agente en tu primera sesión ("Mira en `profile.yml`, he configurado `language.modes_dir`"). El agente usará automáticamente los modos en español.
 
-## ¿Qué modos están incluidos?
+## ¿Qué modos están traducidos?
 
-Esta carpeta incluye el set completo de modos career-ops en español:
+Esta primera iteración cubre los cuatro modos de mayor impacto:
 
-| Archivo | Equivalente EN | Propósito |
-|---------|----------------|-----------|
-| `_shared.md` | `modes/_shared.md` | Contexto compartido, arquetipos, reglas globales |
-| `offer.md` | `modes/offer.md` | Evaluación completa de una oferta (Bloques A-F) |
-| `compare.md` | `modes/compare.md` | Comparación multi-oferta (scoring matrix) |
-| `contact.md` | `modes/contact.md` | LinkedIn outreach: encontrar contactos + mensaje |
-| `apply.md` | `modes/apply.md` | Asistente de aplicación en vivo |
-| `pipeline.md` | `modes/pipeline.md` | Inbox de URLs / Second Brain |
-| `auto-pipeline.md` | `modes/auto-pipeline.md` | Pipeline completo automático |
-| `batch.md` | `modes/batch.md` | Procesamiento masivo de ofertas |
-| `scan.md` | `modes/scan.md` | Escáner de portales |
-| `pdf.md` | `modes/pdf.md` | Generación de PDF ATS-optimizado |
-| `deep.md` | `modes/deep.md` | Research profundo de empresa |
-| `tracker.md` | `modes/tracker.md` | Tracker de aplicaciones |
-| `training.md` | `modes/training.md` | Evaluación de formación |
-| `project.md` | `modes/project.md` | Evaluación de proyecto portfolio |
+| Archivo | Traducido desde | Rol |
+|---------|-----------------|-----|
+| `_shared.md` | `modes/_shared.md` (EN) | Contexto compartido, arquetipos, reglas globales, especificidades del mercado hispanohablante |
+| `oferta.md` | `modes/oferta.md` (ES) | Evaluación completa de una oferta (Bloques A-F) |
+| `aplicar.md` | `modes/apply.md` (EN) | Asistente en vivo para rellenar formularios de candidatura |
+| `pipeline.md` | `modes/pipeline.md` (ES) | Bandeja de URLs / Second Brain para las ofertas recopiladas |
 
-## ¿Qué se mantiene en inglés?
+Los demás modos (`scan`, `batch`, `pdf`, `tracker`, `auto-pipeline`, `deep`, `contacto`, `ofertas`, `project`, `training`) se mantienen en EN/ES. Su contenido es principalmente tooling, rutas y comandos — debe permanecer independiente del idioma.
 
-Voluntariamente no traducido porque es vocabulario tech estándar:
+## Lo que permanece en inglés
+
+No traducido intencionadamente, por ser vocabulario técnico estándar:
 
 - `cv.md`, `pipeline`, `tracker`, `report`, `score`, `archetype`, `proof point`
 - Nombres de herramientas (`Playwright`, `WebSearch`, `WebFetch`, `Read`, `Write`, `Edit`, `Bash`)
 - Valores de estado en el tracker (`Evaluated`, `Applied`, `Interview`, `Offer`, `Rejected`)
-- Snippets de código, rutas, comandos
+- Fragmentos de código, rutas, comandos
 
-Los modos usan español tech natural, como se habla en equipos de engineering: texto corrido en español, términos técnicos en inglés donde es lo habitual. No forzamos traducciones de "Pipeline" a "Tubería" ni de "Deploy" a "Despliegue aplicativo".
+Los modos usan español técnico natural, tal como se habla en equipos de ingeniería en Madrid, Barcelona, Ciudad de México o Buenos Aires: texto corriente en español, términos técnicos en inglés donde es el uso habitual. Sin traducción forzada de "Pipeline" a "Canalización" ni de "Deploy" a "Despliegue aplicativo".
 
-## Vocabulario de referencia
+## Glosario de referencia
+
+Para mantener un tono coherente si modificas o amplías los modos:
 
 | Inglés | Español (en esta codebase) |
 |--------|---------------------------|
-| Job posting | Oferta de empleo |
-| Application | Candidatura / Aplicación |
-| Cover letter | Carta de motivación |
-| Resume / CV | CV / Currículum |
-| Salary | Salario / Sueldo |
-| Compensation | Compensación / Paquete retributivo |
-| Skills | Habilidades / Competencias |
+| Job posting | Oferta de empleo / Anuncio |
+| Application | Candidatura |
+| Cover letter | Carta de presentación |
+| Resume / CV | CV |
+| Salary | Salario / Remuneración |
+| Compensation | Remuneración / Paquete retributivo |
+| Skills | Competencias / Habilidades |
 | Interview | Entrevista |
-| Hiring manager | Hiring manager / Responsable de contratación |
-| Recruiter | Recruiter / Reclutador |
-| AI | IA / Inteligencia Artificial |
+| Hiring manager | Manager de contratación / Hiring manager |
+| Recruiter | Reclutador (o Recruiter) |
+| AI | IA (Inteligencia Artificial) |
 | Requirements | Requisitos |
 | Career history | Trayectoria profesional |
 | Notice period | Preaviso |
-| Probation | Periodo de prueba |
-| Vacation | Vacaciones |
+| Probation | Período de prueba |
+| Vacation | Vacaciones / Días de libre disposición |
+| Extra pay / 13th month | Pagas extra (14 pagas al año) |
 | Permanent employment | Contrato indefinido |
 | Fixed-term contract | Contrato temporal |
 | Freelance | Freelance / Autónomo |
 | Collective agreement | Convenio colectivo |
+| Works council | Comité de empresa |
+| Profit sharing | Participación en beneficios |
+| Meal vouchers | Ticket restaurante / Cheque gourmet |
+| Health insurance | Seguro médico privado |
+| Disability/life insurance | Seguro de vida / Incapacidad |
+| Income tax withholding | IRPF |
 | Social security | Seguridad Social |
 
 ## Contribuir
 
-Si quieres mejorar una traducción o añadir un modo:
+Para mejorar una traducción o añadir un modo:
 
-1. Abre un Issue con la propuesta (ver `CONTRIBUTING.md`)
-2. Respeta el vocabulario de arriba para mantener el tono consistente
-3. Traduce de forma idiomática -- no hagas traducciones literales
-4. Mantén los elementos estructurales (Bloques A-F, tablas, bloques de código, instrucciones de herramientas)
-5. Testea con una oferta real en español antes de enviar el PR
+1. Abre un Issue con tu propuesta (ver `CONTRIBUTING.md`)
+2. Respeta el glosario anterior para mantener un tono coherente
+3. Traduce de forma idiomática — sin traducción palabra por palabra
+4. Conserva los elementos estructurales (Bloques A-F, tablas, bloques de código, instrucciones de herramientas) tal cual
+5. Prueba con una oferta hispanohablante real (InfoJobs, LinkedIn ES, Indeed ES) antes de enviar el PR
