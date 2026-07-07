@@ -4,12 +4,21 @@
  * generate-pdf.mjs — HTML → PDF via Playwright
  *
  * Usage:
- *   node career-ops/generate-pdf.mjs <input.html> <output.pdf> [--format=letter|a4] [--report=NNN]
+ *   node career-ops/generate-pdf.mjs <input.html> <output.pdf> [--format=letter|a4] [--report=NNN] [--max-pages=N | --fit] [--min-scale=0.82]
  *
  * --report links the generated PDF to its tracker/report number and records
  * the linkage in data/pdf-index.tsv so downstream tools (e.g. the TUI
  * dashboard's `d`/`D` hotkeys) can locate the exact PDF for an application.
  * Without --report a manifest row is still written, just unkeyed.
+ *
+ * --max-pages=N (or --fit, shorthand for --max-pages=2) turns on layout
+ * auto-iteration: the HTML is rendered, its real page count is measured from
+ * the rendered PDF, and if it overflows N pages the document is uniformly
+ * scaled down (body zoom) and re-rendered until it fits or a readability floor
+ * (--min-scale, default 0.82 = never shrink below 82%) is hit. Fit mode also
+ * injects print-break hygiene CSS so section headers are never orphaned at a
+ * page bottom and individual jobs/projects are never split across a page break.
+ * Because we render in Chromium we measure true pagination — no blind compile.
  *
  * Requires: @playwright/test (or playwright) installed.
  * Uses Chromium headless to render the HTML and produce a clean, ATS-parseable PDF.
@@ -24,6 +33,12 @@ import { randomUUID } from 'node:crypto';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PDF_PAGE_MARGIN = '0.6in';
+
+// Layout auto-iteration (--max-pages / --fit) tuning.
+const FIT_DEFAULT_MAX_PAGES = 2;   // CV convention when --fit is passed without a number
+const FIT_MIN_SCALE_DEFAULT = 0.82; // readability floor — never shrink below this
+const FIT_STEP = 0.03;             // scale decrement per re-render
+const FIT_MAX_ITERS = 12;          // hard cap on re-render attempts
 
 // Ensure output directory exists (fresh setup)
 mkdirSync(resolve(__dirname, 'output'), { recursive: true });
@@ -210,6 +225,45 @@ export function injectPrintPageCss(html, format = 'a4') {
 }
 
 /**
+ * Inject layout-fit styles used by --max-pages / --fit auto-iteration.
+ *
+ * Two independent effects:
+ *   1. Print-break hygiene (always, once fit mode is on): section titles never
+ *      get orphaned at the bottom of a page (break-after: avoid), and a single
+ *      job/project entry is never split across a page boundary
+ *      (break-inside: avoid). This is the declarative equivalent of the
+ *      "fix orphaned titles / page overflow" loop in LaTeX pipelines — done in
+ *      one pass instead of by measure-and-nudge. It is deliberately NOT applied
+ *      to `.section` (which wraps the whole multi-entry Experience block), since
+ *      keeping an entire section together could PUSH it to a new page and add
+ *      pages rather than save them.
+ *   2. Uniform down-scaling via `body { zoom }` when scale < 1. Chromium honours
+ *      `zoom` for print pagination, so one knob shrinks fonts, margins, and gaps
+ *      proportionally — preserving the design's proportions while fitting more
+ *      per page. @page margins are unaffected, so content reflows within the
+ *      same printable area.
+ *
+ * @param {string} html - HTML that already has print page CSS + inlined fonts.
+ * @param {number} scale - 1 = no zoom; <1 shrinks the document uniformly.
+ * @returns {string} HTML with a `<style id="career-ops-fit">` block injected.
+ */
+export function injectFitStyles(html, scale = 1) {
+  const hygiene =
+    '.section-title { break-after: avoid; }\n' +
+    '.job, .project { break-inside: avoid; }';
+  const zoom = scale < 1 ? `\nbody { zoom: ${scale}; }` : '';
+  const style = `<style id="career-ops-fit">\n${hygiene}${zoom}\n</style>`;
+
+  if (/<\/head>/i.test(html)) {
+    return html.replace(/<\/head>/i, `${style}\n</head>`);
+  }
+  if (/<html\b[^>]*>/i.test(html)) {
+    return html.replace(/<html\b[^>]*>/i, match => `${match}\n<head>\n${style}\n</head>`);
+  }
+  return `${style}\n${html}`;
+}
+
+/**
  * Record a generated PDF in data/pdf-index.tsv so tools can map a tracker
  * report number to the exact PDF (and its source HTML for regeneration).
  *
@@ -262,12 +316,20 @@ async function generatePDF() {
 
   // Parse arguments
   let inputPath, outputPath, format = 'a4', reportNum = '';
+  let maxPages = 0;               // 0 = auto-fit disabled (backward-compatible default)
+  let minScale = FIT_MIN_SCALE_DEFAULT;
 
   for (const arg of args) {
     if (arg.startsWith('--format=')) {
       format = arg.split('=')[1].toLowerCase();
     } else if (arg.startsWith('--report=')) {
       reportNum = arg.split('=')[1].trim();
+    } else if (arg === '--fit') {
+      maxPages = FIT_DEFAULT_MAX_PAGES;
+    } else if (arg.startsWith('--max-pages=')) {
+      maxPages = Number(arg.split('=')[1]);
+    } else if (arg.startsWith('--min-scale=')) {
+      minScale = Number(arg.split('=')[1]);
     } else if (!inputPath) {
       inputPath = arg;
     } else if (!outputPath) {
@@ -276,7 +338,17 @@ async function generatePDF() {
   }
 
   if (!inputPath || !outputPath) {
-    console.error('Usage: node generate-pdf.mjs <input.html> <output.pdf> [--format=letter|a4] [--report=NNN]');
+    console.error('Usage: node generate-pdf.mjs <input.html> <output.pdf> [--format=letter|a4] [--report=NNN] [--max-pages=N | --fit] [--min-scale=0.82]');
+    process.exit(1);
+  }
+
+  if (maxPages && (!Number.isInteger(maxPages) || maxPages < 1)) {
+    console.error(`Invalid --max-pages "${maxPages}". Use a positive integer, e.g. --max-pages=2`);
+    process.exit(1);
+  }
+
+  if (!(minScale > 0 && minScale <= 1)) {
+    console.error(`Invalid --min-scale "${minScale}". Use a value in (0, 1], e.g. --min-scale=0.82`);
     process.exit(1);
   }
 
@@ -309,6 +381,9 @@ async function generatePDF() {
   console.log(`📄 Input:  ${inputPath}`);
   console.log(`📁 Output: ${outputPath}`);
   console.log(`📏 Format: ${format.toUpperCase()}`);
+  if (maxPages) {
+    console.log(`🎯 Fit target: ≤${maxPages} page(s) (floor ${Math.round(minScale * 100)}%)`);
+  }
 
   let html = await readFile(inputPath, 'utf-8');
   let cvMarkdown = '';
@@ -328,7 +403,7 @@ async function generatePDF() {
     console.log(`🧹 ATS normalization: ${totalReplacements} replacements (${breakdown})`);
   }
 
-  return renderHtmlToPdf(html, outputPath, { format, baseDir: dirname(inputPath), reportNum, inputPath });
+  return renderHtmlToPdf(html, outputPath, { format, baseDir: dirname(inputPath), reportNum, inputPath, maxPages, minScale });
 }
 
 /**
@@ -384,14 +459,16 @@ export async function inlineLocalFonts(html) {
  *
  * @param {string} html - Full HTML document to render.
  * @param {string} outputPath - Absolute path to write the PDF to.
- * @param {{format?: 'a4'|'letter', baseDir?: string, reportNum?: string, inputPath?: string}} [opts]
- * @returns {Promise<{outputPath: string, pageCount: number, size: number}>}
+ * @param {{format?: 'a4'|'letter', baseDir?: string, reportNum?: string, inputPath?: string, maxPages?: number, minScale?: number}} [opts]
+ * @returns {Promise<{outputPath: string, pageCount: number, size: number, scale: number, fitApplied: boolean}>}
  */
 export async function renderHtmlToPdf(html, outputPath, opts = {}) {
   const format = opts.format || 'a4';
   const baseDir = opts.baseDir || process.cwd();
   const reportNum = opts.reportNum || '';
   const inputPath = opts.inputPath || '';
+  const maxPages = Number.isInteger(opts.maxPages) && opts.maxPages > 0 ? opts.maxPages : 0;
+  const minScale = opts.minScale > 0 && opts.minScale <= 1 ? opts.minScale : FIT_MIN_SCALE_DEFAULT;
 
   mkdirSync(dirname(outputPath), { recursive: true });
 
@@ -402,42 +479,69 @@ export async function renderHtmlToPdf(html, outputPath, opts = {}) {
   // origin that can load local images, fonts, and other resources.
   const tmpHtmlPath = resolve(baseDir, `.career-ops-render-${randomUUID()}.html`);
   const { writeFile, unlink } = await import('fs/promises');
-  await writeFile(tmpHtmlPath, html, 'utf-8');
 
   const browser = await chromium.launch({ headless: true });
   try {
     const page = await browser.newPage();
 
-    // Load from file:// so the page origin allows local subresources
-    await page.goto(pathToFileURL(tmpHtmlPath).href, {
-      waitUntil: 'load',
-    });
+    // Render the document at a given scale and report its true page count.
+    // In fit mode (maxPages > 0) we inject break-hygiene + zoom; otherwise the
+    // HTML is rendered verbatim so non-fit output is byte-for-byte unchanged.
+    const renderAt = async (scale) => {
+      const htmlToRender = maxPages ? injectFitStyles(html, scale) : html;
+      await writeFile(tmpHtmlPath, htmlToRender, 'utf-8');
 
-    // Wait for fonts and images to settle
-    await page.evaluate(() => document.fonts.ready);
+      // Load from file:// so the page origin allows local subresources
+      await page.goto(pathToFileURL(tmpHtmlPath).href, { waitUntil: 'load' });
 
-    // Generate PDF
-    const pdfBuffer = await page.pdf({
-      printBackground: true,
-      margin: {
-        top: '0',
-        right: '0',
-        bottom: '0',
-        left: '0',
-      },
-      preferCSSPageSize: true,
-    });
+      // Wait for fonts and images to settle
+      await page.evaluate(() => document.fonts.ready);
 
-    // Write PDF
-    await writeFile(outputPath, pdfBuffer);
+      const pdfBuffer = await page.pdf({
+        printBackground: true,
+        margin: { top: '0', right: '0', bottom: '0', left: '0' },
+        preferCSSPageSize: true,
+      });
 
-    // Count pages (approximate from PDF structure)
-    const pdfString = pdfBuffer.toString('latin1');
-    const pageCount = (pdfString.match(/\/Type\s*\/Page[^s]/g) || []).length;
+      // Count pages (approximate from PDF structure)
+      const pdfString = pdfBuffer.toString('latin1');
+      const pageCount = (pdfString.match(/\/Type\s*\/Page[^s]/g) || []).length;
+      return { pdfBuffer, pageCount };
+    };
 
+    let scale = 1;
+    let result = await renderAt(scale);
+    const fitTrail = [{ scale: 1, pages: result.pageCount }];
+
+    // Auto-fit: shrink uniformly until we fit within maxPages or hit the floor.
+    if (maxPages && result.pageCount > maxPages) {
+      for (let i = 0; i < FIT_MAX_ITERS && result.pageCount > maxPages && scale > minScale; i++) {
+        const next = Math.max(minScale, Number((scale - FIT_STEP).toFixed(4)));
+        if (next === scale) break; // already at floor
+        scale = next;
+        result = await renderAt(scale);
+        fitTrail.push({ scale, pages: result.pageCount });
+      }
+    }
+
+    // Write final PDF
+    await writeFile(outputPath, result.pdfBuffer);
+
+    const pageCount = result.pageCount;
     console.log(`✅ PDF generated: ${outputPath}`);
     console.log(`📊 Pages: ${pageCount}`);
-    console.log(`📦 Size: ${(pdfBuffer.length / 1024).toFixed(1)} KB`);
+    if (maxPages) {
+      if (scale < 1) {
+        const trail = fitTrail.map(t => `${Math.round(t.scale * 100)}%→${t.pages}p`).join(' ');
+        console.log(`🔧 Auto-fit: scaled to ${Math.round(scale * 100)}% [${trail}]`);
+      } else {
+        console.log(`🔧 Auto-fit: fits at 100% (target ≤${maxPages})`);
+      }
+      if (pageCount > maxPages) {
+        console.log(`⚠️  Still ${pageCount} pages at the ${Math.round(minScale * 100)}% floor — trim CV content to reach ≤${maxPages}.`);
+      }
+    }
+    console.log(`📦 Size: ${(result.pdfBuffer.length / 1024).toFixed(1)} KB`);
 
     try {
       updatePDFManifest(reportNum, outputPath, inputPath, format);
@@ -447,7 +551,7 @@ export async function renderHtmlToPdf(html, outputPath, opts = {}) {
       console.error(`⚠️  Manifest update failed: ${err.message}`);
     }
 
-    return { outputPath, pageCount, size: pdfBuffer.length };
+    return { outputPath, pageCount, size: result.pdfBuffer.length, scale, fitApplied: !!maxPages };
   } finally {
     await browser.close();
     // Clean up temp file
